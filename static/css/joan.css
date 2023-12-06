@@ -1,0 +1,262 @@
+body {
+  font-size: 13px;
+}
+
+.header {
+  background-color: #17375E;
+  padding: 10px 30px;
+  position: relative;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.container-fluid {
+  padding-top: 20px;
+}
+
+.input-group-text,
+.form-select {
+  border-radius: 0;
+  font-size: inherit;
+}
+
+.form-select:focus,
+.form-control:focus {
+  border-color: var(--bs-border-color);
+  box-shadow: none;
+  outline: none;
+}
+
+.btn.accordion-button {
+  background-color: var(--bs-btn-bg);
+  color: var(--bs-btn-color);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  width: 206px;
+  font-size: 13px;
+  justify-content: center;
+}
+
+.accordion-button::after {
+  display: none;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  outline: none;
+}
+/* 
+.accordion-button:not(.collapsed) {
+  color: inherit;
+} */
+
+.table {
+  border-radius: 0.75rem;
+  background: white;
+}
+
+td:focus,
+input:focus,
+select:focus {
+  outline: none;
+}
+
+.table-parts .part .col2,
+.table-fasteners .fastener .col2,
+.table-nodes thead .col4 {
+  padding: 0;
+}
+
+.table-nodes thead select {
+  background-color: var(--bs-table-bg);
+}
+
+select {
+  width: 100%;
+  outline: none;
+  border: 0;
+  padding: 2px 0.25rem;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.form-control,
+.btn {
+  font-size: inherit;
+}
+
+/*.plot {
+    position: fixed;
+    top: 32px;
+    right: 32px;
+}*/
+
+.canvas-wrapper {
+  position: relative;
+}
+
+canvas {
+  border: 1px solid black;
+}
+
+.canvas-wrapper input {
+  position: absolute;
+  top: 10px;
+  max-width: 40px;
+  font-size: 13px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: blue;
+}
+
+.canvas-wrapper span.col,
+.canvas-wrapper span.row {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+}
+
+.canvas-wrapper span.output-span {
+  position: absolute;
+  font-size: 9px;
+  background-color: rgba(255, 255, 255, 1);
+  z-index: 2;
+  padding: 1px;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.canvas-wrapper span.row {
+  left: 14px;
+}
+
+#output {
+  padding: 1em;
+  border: 1px solid gray;
+}
+
+.part-selection {
+  display: none;
+}
+
+
+
+.dropdown-menu {
+  font-size: inherit;
+}
+
+.creation-mode,
+.deletion-mode {
+  width: unset;
+}
+
+.calc__button {
+  padding: 5px 25px;
+}
+
+.modal-body input {
+  color: #000;
+}
+
+sup {
+  font-size: 10px;
+}
+
+.results {
+  display: none;
+}
+
+tr.part td:first-child {
+  white-space: nowrap;
+}
+
+.update-popup {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: white;
+  display: none;
+}
+
+.output-mode {
+  display: none;
+}
+
+.output-mode label {
+  width: 80px;
+}
+
+thead {
+  font-size: 13px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.form-control, .form-select, .input-group-text,.btn-group-sm>.btn, .btn, .btn-sm, .table-sm>:not(caption)>*>* {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.spacing-input {
+  text-align: center;
+}
+
+.model {
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1; */
+  background-color: #fff;
+  border-bottom: 2px solid #000;
+  box-sizing: border-box;
+}
+
+/* .input-data {
+  padding-top: 608px;
+} */
+
+.input-group>.form-control#cols-amount, .input-group>.form-control#rows-amount {
+  flex: unset;
+  width: 40px;
+}
+
+.form-select#parts-amount {
+  flex: unset;
+  width: 60px;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+h6 {
+  margin-bottom: 4px;
+}
+
+.form-select#method-type {
+  flex: unset;
+  width: 200px;
+}
+
+.part-name {
+  position: absolute;
+}
+
+.method-type select {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.more-info {
+  display: none;
+}

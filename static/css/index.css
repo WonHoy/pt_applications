@@ -1,0 +1,157 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/static/fonts/Montserrat-Regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/static/fonts/Montserrat-Medium.ttf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/static/fonts/Montserrat-SemiBold.ttf');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('/static/fonts/Montserrat-Bold.ttf');
+    font-weight: 700;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font: inherit;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #4A61DD;
+}
+
+.header {
+    background-color: #17375E;
+    padding: 10px 30px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+a.logo {
+    text-decoration: none;
+}
+
+a.logo img {
+    vertical-align: bottom;
+}
+
+.main {
+    padding: 169px 0;
+}
+
+.main-nav-items {
+    list-style: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.main-nav-item {
+    padding-bottom: 14px;
+    border-bottom: 2px solid #4A61DD;
+    margin-right: 40px;
+}
+
+.applications {
+    margin-top: 60px;
+}
+
+.applications-title {
+    color: #000;
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.application-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: minmax(453px, 1fr);
+    gap: 26px;
+}
+
+.application-card {
+    border-radius: 8px;
+    border: 1px solid #C3C3C3;
+    height: 100%;
+}
+
+.application-card-cover {
+    height: 240px;
+    font-size: 60px;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.application-card-cover-text {
+    text-align: center;
+}
+
+.joan-card .application-card-cover {
+    background-color: #B5E61D;
+}
+
+.lug-card .application-card-cover {
+    background-color: #FFFF80;
+}
+
+.application-card-content {
+    padding: 24px;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 240px);
+}
+
+.application-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.application-card-description {
+    margin-bottom: 20px;
+}
+
+a.button {
+    border-radius: 6px;
+    background: #F0F3FF;
+    text-decoration: none;
+    padding: 12px 20px;
+    color: #4A61DD;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    width: 105px;
+}
+
+
+
