@@ -193,6 +193,7 @@ def joan_calc(request):
             plate_stiffnesses_loads = model.plate_stiffnesses_summary_v2()
 
         print('plate_stiffnesses', plate_stiffnesses_loads)
+        print('plate_stiffnesses', plate_stiffnesses_loads)
         data = {
             'disp_vector': displacement_vector,
             'reactions': reactions,
