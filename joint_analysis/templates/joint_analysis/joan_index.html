@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% csrf_token %}
+<head>
+    <meta charset="UTF-8">
+    <title>Joint Analysis</title>
+    <link href={%static "css/bootstrap.min.css" %} rel="stylesheet">
+    <link href={%static "css/joan.css" %} rel="stylesheet">
+</head>
+<body>
+{% csrf_token %}
+<header class="header">
+    <a href="/" class="logo">
+      <img src="/static/img/logo.png" alt="Logo">
+    </a>
+</header>
+<div class="container-fluid">
+    <div class="row">
+        <div class="model px-3 mb-2">
+            <div class="load-model">
+                <input type="file" id="file-select"/>
+                <pre id="data"></pre>    
+            </div>
+            <div class="row">
+                <h6 class="plot-title fw-bold col-1">Model</h6>
+                <div class="d-flex align-items-center justify-content-between mb-2 col-11">
+                    <div class="d-flex align-items-center">
+                        <div class="cols-amount me-3">
+                            <div class="input-group">
+                                <label class="input-group-text border-secondary bg-success-subtle" for="cols-amount">Number
+                                    of columns</label>
+                                <input type="number" id="cols-amount" class="form-control border-secondary rounded-0">
+                            </div>
+                        </div>
+                        <div class="rows-amount me-3">
+                            <div class="input-group">
+                                <label class="input-group-text border-secondary bg-success-subtle" for="rows-amount">Number
+                                    of rows</label>
+                                <input type="text" id="rows-amount" class="form-control border-secondary rounded-0">
+                            </div>
+                        </div>
+                        <div class="draw-grid">
+                            <button class="btn btn-success" id="draw-grid">Draw grid</button>
+                        </div>
+                        <div style="margin-left: 150px;">
+                            <div class="input-group">
+                                <label class="input-group-text border-secondary bg-success-subtle" for="units">Measurement units</label>
+                                <select class="form-select border-secondary rounded-0" id="units">
+                                    <option value="imperial">Imperial</option>
+                                    <option value="si">SI</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="save-model d-flex align-items-center">
+                        <div class="input-group me-3">
+                            <label class="input-group-text border-secondary bg-success-subtle" for="file-name">File name</label>
+                            <input type="text" id="file-name" class="form-control border-secondary rounded-0">
+                        </div>
+                        <a href="data:application/txt;charset=utf-8" id="save-model-link" class="btn btn-primary disabled flex-shrink-0 save">Save data</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="plot">
+                <!-- <div id="output">Кликай по холсту!</div> -->
+                <div class="canvas-wrapper">
+                    <canvas id="canvas" class="align-text-bottom me-3"></canvas>
+                </div>
+
+                <div class="accordion accordion-flush mt-2 col-8" id="accordionInputMode">
+                    <div class="accordion-item mb-2">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button input-mode-toggle-button collapsed btn btn-success rounded"
+                                    type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseInputMode"
+                                    aria-expanded="true" aria-controls="flush-collapseOne">
+                                Collapse Input/Output Mode
+                            </button>
+                        </h2>
+                        <div id="flush-collapseInputMode" class="accordion-collapse collapse show"
+                             data-bs-parent="#accordionInputMode">
+                            <div class="accordion-body py-2 px-0">
+                                <div class="sidebar d-flex">
+                                    <div class="input-mode p-2 border border-secondary me-4">
+                                        <div class="input mb-2 fw-bold fs-6">Input Mode</div>
+                                        <div class="mode-radio d-flex">
+                                            <div class="me-2">
+                                                <div class="input-group">
+                                                    <div class="input-group-text border-secondary">
+                                                        <input class="mode-radio" id="creation-mode-radio" type="radio"
+                                                               name="mode-radio" value="create" checked>
+                                                    </div>
+                                                    <div class="creation-mode input-group">
+                                                        <label class="input-group-text border-secondary bg-success-subtle"
+                                                               for="creation-mode">Create</label>
+                                                        <select class="form-select border-secondary rounded-0"
+                                                                id="creation-mode">
+                                                            <option value="node">Node</option>
+                                                            <option value="plate">Plate</option>
+                                                            <option value="fastener">Fastener</option>
+                                                            <option value="constraint">Constraint</option>
+                                                            <option value="load">Load</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="part-selection mt-2">
+                                                    <div class="input-group d-flex justify-content-between">
+                                                        <span>Choose part:</span>
+                                                        <select class="form-select flex-grow-0 border-secondary"
+                                                                id="part-selection" style="width: 109px;">
+                                                            <option value="plate-a">Part a</option>
+                                                            <option value="plate-b">Part b</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <div class="input-group">
+                                                    <div class="input-group-text border-secondary">
+                                                        <input class="mode-radio" id="deletion-mode-radio" type="radio"
+                                                               name="mode-radio" value="delete">
+                                                    </div>
+                                                    <div class="deletion-mode input-group">
+                                                        <label class="input-group-text border-secondary bg-danger-subtle"
+                                                               for="deletion-mode">Delete</label>
+                                                        <select class="form-select border-secondary" id="deletion-mode">
+                                                            <option value="node">Node</option>
+                                                            <option value="plate">Plate</option>
+                                                            <option value="fastener">Fastener</option>
+                                                            <option value="constraint">Constraint</option>
+                                                            <option value="load">Load</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="output-mode p-2 border border-secondary">
+                                        <div class="output mb-2 fw-bold fs-6">Output Mode</div>
+                                        <div class="d-flex align-stretch">
+                                            <div class="me-2">
+                                                <div class="input-group mb-2 d-flex flex-column border border-secondary">
+                                                    <div class="input-group-text border-0 border-bottom border-secondary">Node</div>
+                                                    <div class="fastener-options" style="padding: 0.375rem 0.75rem">
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="node-checkbox"
+                                                                   name="output-node" id="output-node-loads"
+                                                                   value="thickness" checked>
+                                                            <label class="node-label ms-1" for="output-node-loads">Thickness</label>
+                                                        </div>
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="node-checkbox"
+                                                                   name="output-node" id="output-node-diameter"
+                                                                   value="area">
+                                                            <label class="node-label ms-1" for="output-node-diameter">Area</label>
+                                                        </div>
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="node-checkbox"
+                                                                   name="output-node" id="output-node-stiffness"
+                                                                   value="width">
+                                                            <label class="node-label ms-1" for="output-node-stiffness">Width</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="me-2">
+                                                <div class="input-group mb-2 d-flex flex-column border border-secondary">
+                                                    <div class="input-group-text border-0 border-bottom border-secondary">Fastener</div>
+                                                    <div class="fastener-options" style="padding: 0.375rem 0.75rem">
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="fastener-checkbox"
+                                                                   name="output-fastener" id="output-fastener-loads"
+                                                                   value="load" checked>
+                                                            <label class="fastener-label ms-1"
+                                                                   for="output-fastener-loads">Load</label>
+                                                        </div>
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="fastener-checkbox"
+                                                                   name="output-fastener" id="output-fastener-stiffness"
+                                                                   value="stiffness">
+                                                            <label class="fastener-label ms-1"
+                                                                   for="output-fastener-stiffness">Stiffness</label>
+                                                        </div>
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="fastener-checkbox"
+                                                                   name="output-fastener" id="output-fastener-diameter"
+                                                                   value="diameter">
+                                                            <label class="fastener-label ms-1"
+                                                                   for="output-fastener-diameter">Diameter</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2">
+                                                <div class="input-group d-flex flex-column border h-100 border-secondary">
+                                                    <div class="input-group-text border-0 border-bottom border-secondary">Plate</div>
+                                                    <div class="plate-options" style="padding: 0.375rem 0.75rem">
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="plate-checkbox"
+                                                                   name="output-plate" id="output-plate-loads"
+                                                                   value="load"  checked>
+                                                            <label class="plate-label ms-1" for="output-plate-loads">Load</label>
+                                                        </div>
+                                                        <div class="d-flex align-baseline">
+                                                            <input type="checkbox" class="plate-checkbox"
+                                                                   name="output-plate" id="output-plate-stiffness"
+                                                                   value="stiffness">
+                                                            <label class="plate-label ms-1"
+                                                                   for="output-plate-stiffness">Stiffness</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-data px-3 pb-3">
+            <div class="accordion accordion-flush mt-2" id="accordionDataInput">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button input-data-toggle-button collapsed btn btn-success rounded"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseDataInput"
+                                aria-expanded="true" aria-controls="flush-collapseDataInput">
+                            Collapse Input Data
+                        </button>
+                    </h2>
+                    <div id="flush-collapseDataInput" class="accordion-collapse collapse show"
+                         data-bs-parent="#accordionDataInput">
+                        <div class="accordion-body py-2 px-0">
+                            <div class="parts mb-2">
+                                <h6 class="parts-title fw-bold">Parts</h6>
+                                <div class="plates__amount row">
+                                    <div class="col-2">
+                                        <div class="input-group mb-3">
+                                            <label class="input-group-text border-secondary bg-success-subtle"
+                                                   for="parts-amount">Number of parts</label>
+                                            <select class="form-select border-secondary" id="parts-amount">
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table-parts table table-bordered border-secondary table-sm mb-2">
+                                    <thead class="table-success text-center table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 col-1">Part</td>
+                                        <td class="col2 col-3">Selection option</td>
+                                        <td class="col3 col">Material</td>
+                                        <td class="col4 col-2 measurable modulus">E</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="part">
+                                        <td class="col1">Part a</td>
+                                        <td class="col2">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                    Define material with
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item material-from-DB" href="#exampleModal"
+                                                           data-bs-toggle="modal">Database</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item material-user-defined"
+                                                           href="javascript:void()">User data</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        <td class="col3"></td>
+                                        <td class="col4"></td>
+                                    </tr>
+                                    <tr class="part">
+                                        <td class="col1">Part b</td>
+                                        <td class="col2">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                    Define material with
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item material-from-DB" href="#exampleModal"
+                                                           data-bs-toggle="modal">Database</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item material-user-defined"
+                                                           href="javascript:void()">User data</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        <td class="col3"></td>
+                                        <td class="col4"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="nodes mb-2">
+                                <h6 class="nodes-title fw-bold">Nodes</h6>
+                                <table class="table-nodes table table-bordered border-secondary table-sm">
+                                    <thead class="table-success text-center table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 align-middle col-2" rowspan="2">Node ID</td>
+                                        <td class="col2 align-middle col-2 measurable length" rowspan="2">Coord X</td>
+                                        <td class="col3 col-2  measurable length">Thickness</td>
+                                        <td class="col4 col-3">
+                                            <select name="widthArea" id="width-area-select">
+                                                <option value="width" class="measurable length">Width</option>
+                                                <option value="area" class="measurable area">Bypass Area</option>
+                                            </select>
+                                        </td>
+                                        <td class="col5 col-3 measurable area" id="widthAreaCalc">Bypass Area</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="node">
+                                        <td class="col1"></td>
+                                        <td class="col2" contenteditable="true"></td>
+                                        <td class="col3 node-thk" contenteditable="true"></td>
+                                        <td class="col4 node-width-area" contenteditable="true"></td>
+                                        <td class="col5 node-width-area-calc"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="plates mb-2">
+                                <h6 class="nodes-title fw-bold">Plates</h6>
+                                <table class="table-plates table table-bordered border-secondary table-sm">
+                                    <thead class="table-success text-center table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 col-4">Connected Nodes</td>
+                                        <td class="col2 col-4">Plate</td>
+                                        <td class="col3 col-4 measurable modulus" colspan="4">E</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="plate">
+                                        <td class="col1" contenteditable="true"></td>
+                                        <td class="col2" contenteditable="true"></td>
+                                        <td class="col3" contenteditable="true"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="spacings mb-2">
+                                <h6 class="nodes-title fw-bold">Spacings</h6>
+                                <table class="table-spacings table table-bordered border-secondary table-sm">
+                                    <thead class="table-success text-center table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 align-middle"></td>
+                                        <td class="col2 align-middle measurable length">Spacing</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                            <div class="fasteners mb-2">
+                                <h6 class="nodes-title fw-bold">Fasteners</h6>
+                                <table class="table-fasteners table table-bordered border-secondary table-sm">
+                                    <thead class="table-success text-center align-middle table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 col-2">Connected Nodes</td>
+                                        <td class="col2 col-2">Fastener Type</td>
+                                        <td class="col3 col-2">Fastener P/N</td>
+                                        <td class="col4 col-1">Nom dia</td>
+                                        <td class="col5 col-1 measurable length">Dfast</td>
+                                        <td class="col6 col-1 measurable length">Dhole</td>
+                                        <td class="col7 col-1 measurable modulus">Ebb</td>
+                                        <td class="col8 col-1 measurable modulus">Gb</td>
+                                        <td class="col9 col-1 measurable length">Spacing</td>
+                                        <td class="col10 col-1">Quantity</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="fastener">
+                                        <td class="col1" contenteditable="true"></td>
+                                        <td class="col2" contenteditable="true">
+                                            <select name="type1" id="type1-select" class="fastener-type">
+                                                <option value="rivet">rivet</option>
+                                                <option value="bolt">bolt</option>
+                                            </select>
+                                        </td>
+                                        <td class="col3" contenteditable="true"></td>
+                                        <td class="col4" contenteditable="true"></td>
+                                        <td class="col5" contenteditable="true"></td>
+                                        <td class="col6" contenteditable="true"></td>
+                                        <td class="col7" contenteditable="true"></td>
+                                        <td class="col8" contenteditable="true"></td>
+                                        <td class="col9" contenteditable="true">1</td>
+                                        <td class="col10" contenteditable="true">1</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="reactions mb-2">
+                                <h6 class="reactions-title fw-bold">Reactions</h6>
+                                <table class="table-reactions table table-bordered border-secondary table-sm">
+                                    <thead class="table-success text-center table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 align-middle col-6">Node</td>
+                                        <td class="col2 align-middle col-6 measurable load">Force</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="reaction">
+                                        <td class="col1"></td>
+                                        <td class="col2"contenteditable> </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="loads mb-2">
+                                <h6 class="loads-title fw-bold">Loads</h6>
+                                <table class="table-loads table table-bordered border-secondary table-sm">
+                                    <thead class="table-success text-center table-bordered border-secondary">
+                                    <tr>
+                                        <td class="col1 align-middle col-6">Node</td>
+                                        <td class="col2 align-middle col-6 measurable load">Value</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="load">
+                                        <td class="col1"></td>
+                                        <td class="col2" contenteditable="true"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="input-mode row col-4">
+                                <div class="pt-3">
+                                    <div class="mode-radio">
+                                        <div class="method mb-3">
+                                            <span>Choose fastener flexibility formula:</span>
+                                            <div class="method-type input-group align-items-center">
+                                                <select class="form-select border-secondary" id="method-type">
+                                                    <option value="swift">Douglas / Swift (2 parts)</option>
+                                                    <option value="huth">Airbus / Huth (2 parts)</option>
+                                                    <option value="boeing2">Boeing (2 parts)</option>
+                                                    <option value="boeing3+">Boeing (3+ parts)</option>
+                                                </select>
+
+                                                <a class="more-info" href="../../../static/docs/(Rutman's_Fastener)_Fasteners_Modeling_for_MSC.Nastran_Finite_Element_Analysis.pdf" download=>Подробнее о данном методе</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="calc">
+                                    <button id="calc" class="calc__button btn btn-primary">Calculate</button>
+                                    <span id="calc-time"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="results px-3 pb-3">
+            <div class="loads-summary">
+                <h6 class="fw-bold">Loads Summary</h6>
+                <table class="table table-bordered border-secondary table-sm table-result-loads align-middle text-center">
+                    <thead class="table-success text-center table-bordered border-secondary">
+                    <tr class="result-loads-row-section align-middle">
+                        <td>Part</td>
+                        <td>Node ID</td>
+                        <td class="measurable length">Thickness</td>
+                        <td class="measurable area">Area</td>
+                        <td>No. of fasteners</td>
+                        <td class="measurable length">Fastener Diameter</td>
+                        <td class="measurable load">Incoming Load</td>
+                        <td class="measurable load">Bypass Load</td>
+                        <td class="measurable load">Load Transfer</td>
+                        <td>LTF</td>
+                        <td class="measurable modulus">Applied Stress</td>
+                        <td class="measurable modulus">Bypass Stress</td>
+                        <td class="measurable modulus">Bearing Stress</td>
+                        <td>fbr / ft</td>
+                        <td>fbp / ft</td>
+                        <td class="measurable modulus">Jarfall Effective Stress</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <!--        <div class="nodal-displacement-block">-->
+            <!--            <h5>Nodal Displacement Vector</h5>-->
+            <!--            <div class="nodal-displacement"></div>-->
+            <!--        </div>-->
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Material Database</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <label for="input-material-datalist" class="form-label bg-white">Enter material</label>
+                        <input type="text" class="form-control" placeholder="Aluminum" list="list-material"
+                               id="input-material-datalist">
+                        <datalist id="list-material">
+                            <option value="aluminum">Aluminum</option>
+                            <option value="steel">Steel</option>
+                            <option value="titanium">Titanium</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="input-alloy-datalist" class="form-label bg-white">Enter alloy</label>
+                        <input type="text" class="form-control" placeholder="2024" list="list-alloy"
+                               id="input-alloy-datalist">
+                        <datalist id="list-alloy">
+                            <option value="2024">2024</option>
+                            <option value="7075">7075</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="input-spec-datalist" class="form-label bg-white">Enter specification</label>
+                        <input type="text" class="form-control" placeholder="AMS 4028" list="list-spec"
+                               id="input-spec-datalist">
+                        <datalist id="list-spec">
+                            <option>AMS-QQ-A-225/4</option>
+                            <option>AMS 4045</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="input-form-datalist" class="form-label bg-white">Enter form</label>
+                        <input type="text" class="form-control" placeholder="Sheet" list="list-form"
+                               id="input-form-datalist">
+                        <datalist id="list-form">
+                            <option value="sheet">Sheet</option>
+                            <option value="plate">Plate</option>
+                        </datalist>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="input-ht-datalist" class="form-label bg-white">Enter heat treatment</label>
+                        <input type="text" class="form-control" placeholder="T3" list="list-ht" id="input-ht-datalist">
+                        <datalist id="list-ht">
+                            <option value="T3">T3</option>
+                            <option value="T6">T6</option>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal">Close
+                    </button>
+                    <button type="button" class="btn btn-primary" id="save-material">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!--Update calculation popup-->
+    <div class="update-popup border border-danger rounded text-danger p-2">
+        Результаты устарели. Обновите расчет!
+    </div>
+
+    <script src={%static "js/jquery.min.js" %}></script>
+    <script src={%static "js/bootstrap.bundle.min.js" %} ></script>
+    <script src={%static "js/bootstrap-autocomplete.min.js" %}></script>
+    <script src={%static "js/FileSaver.js" %}></script>
+    <script src={%static "js/joan.js" %} type="module"></script>
+    <!--<script src="../static/js/jquery.min.js"></script>-->
+    <!--<script src="../static/js/bootstrap.min.js"></script>-->
+    <!--<script src="../static/js/joan.js" type="module"></script>-->
+</body>
+</html>
