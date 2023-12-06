@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    container_name: pgdb
+    volumes:
+      - db:/var/lib/postgresql/data/
+    env_file:
+      - .env.db
+    ports:
+      - '5432:5432'
+volumes:
+  db:
+    driver: local
