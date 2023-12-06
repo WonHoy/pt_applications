@@ -27,7 +27,7 @@ DEBUG = True
 if DEBUG:
     load_dotenv()
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['wonhoy.github.io/pt_applications']
 
 # Application definition
 
